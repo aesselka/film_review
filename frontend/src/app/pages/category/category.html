@@ -1,0 +1,42 @@
+<div class="category-page">
+  <div class="category-header">
+    <div class="genres-panel">
+      <h3 class="panel-title">Categories</h3>
+      <button class="genre-btn" [class.active]="selectedGenre() === ''" (click)="selectGenre('')">
+        All
+      </button>
+      @for (genre of genres(); track genre.id) {
+        <button
+          class="genre-btn"
+          [class.active]="selectedGenre() === genre.slug"
+          (click)="selectGenre(genre.slug)"
+        >
+          {{ genre.name }}
+        </button>
+      }
+    </div>
+
+    <div class="search-wrapper">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.35-4.35" />
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        name="search"
+        placeholder="Search movies..."
+        (input)="onSearch()"
+        class="search-input"
+      />
+    </div>
+  </div>
+
+  <div class="movies-grid">
+    @for (movie of movies(); track movie.id) {
+      <app-movie-card [movie]="movie" />
+    } @empty {
+      <div class="empty">No movies found</div>
+    }
+  </div>
+</div>

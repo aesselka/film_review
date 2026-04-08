@@ -1,0 +1,32 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <h1 class="auth-title">NITTOR</h1>
+    <p class="auth-sub">Sign in to your account</p>
+
+    <form (ngSubmit)="submit()" class="auth-form">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" [(ngModel)]="username" name="username" placeholder="Enter username" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Enter password"
+        />
+      </div>
+
+      @if (error()) {
+        <p class="error-msg">{{ error() }}</p>
+      }
+
+      <button type="submit" class="btn-submit" [disabled]="loading()">
+        {{ loading() ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <p class="auth-link">Don't have an account? <a routerLink="/register">Register</a></p>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="profile-page">
+  <div class="profile-hero">
+    <div class="profile-avatar">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
+        />
+      </svg>
+    </div>
+    <div class="profile-name">{{ auth.username() }}</div>
+
+    @if (profile(); as p) {
+      <div class="profile-stats">
+        <div class="stat">
+          <span class="stat-value">{{ p.watched_count }}</span>
+          <span class="stat-label">Watched</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{ p.reviews_count }}</span>
+          <span class="stat-label">Reviews</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{ p.favorites_count }}</span>
+          <span class="stat-label">Favorites</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="profile-tabs">
+    <button
+      class="tab"
+      [class.active]="activeTab() === 'watched'"
+      (click)="activeTab.set('watched')"
+    >
+      Watched
+    </button>
+    <button
+      class="tab"
+      [class.active]="activeTab() === 'favorites'"
+      (click)="activeTab.set('favorites')"
+    >
+      Favorites
+    </button>
+  </div>
+
+  <div class="tab-content">
+    @if (activeTab() === 'watched') {
+      <app-movie-row title="Watched" [movies]="watched()" />
+    }
+    @if (activeTab() === 'favorites') {
+      <app-movie-row title="Favorites" [movies]="favorites()" />
+    }
+  </div>
+</div>

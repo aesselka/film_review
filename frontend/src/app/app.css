@@ -1,0 +1,23 @@
+.main-content {
+  padding-top: 64px;
+  min-height: 100vh;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 32px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.footer a {
+  color: var(--muted);
+  transition: color 0.2s;
+}
+
+.footer a:hover {
+  color: var(--text);
+}

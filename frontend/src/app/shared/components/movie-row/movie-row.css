@@ -1,0 +1,47 @@
+.movie-row {
+  padding: 0 32px 40px;
+}
+
+.row-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.row-title {
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.scroll-btn {
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s;
+}
+
+.scroll-btn:hover {
+  opacity: 0.75;
+}
+
+.row-cards {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.row-cards::-webkit-scrollbar {
+  display: none;
+}
+
+.empty-state {
+  color: var(--muted);
+  font-size: 14px;
+  padding: 40px 0;
+}

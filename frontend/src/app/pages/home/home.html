@@ -1,0 +1,58 @@
+<div class="home">
+  <section class="hero">
+    <div
+      class="hero-backdrop"
+      [style.backgroundImage]="'url(' + currentHero.poster_url + ')'"
+    ></div>
+    <div class="hero-gradient"></div>
+
+    <div class="hero-dots">
+      @for (movie of heroMovies(); track movie.id; let i = $index) {
+        <button class="dot" [class.active]="i === heroIndex()" (click)="setHero(i)"></button>
+      }
+    </div>
+
+    <button class="hero-arrow left" (click)="prevHero()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+    </button>
+    <button class="hero-arrow right" (click)="nextHero()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </button>
+
+    <div class="hero-content">
+      <div class="hero-meta">
+        @for (genre of currentHero.genres; track genre) {
+          <span class="hero-genre">{{ genre }}</span>
+        }
+        <span class="hero-year">{{ currentHero.released_year }}</span>
+      </div>
+      <h1 class="hero-title">{{ currentHero.title }}</h1>
+      <p class="hero-desc">{{ currentHero.overview }}</p>
+      <div class="hero-actions">
+        <a [routerLink]="['/movies', currentHero.id]" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+          Watch trailer
+        </a>
+        <a [routerLink]="['/movies', currentHero.id]" class="btn-secondary">About film</a>
+        <button class="icon-action">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="feed">
+    <app-movie-row title="Trending Now" [movies]="trending()" />
+    <app-movie-row title="Top Rated" [movies]="topRated()" />
+    <app-movie-row title="Action & Adventure" [movies]="action()" />
+    <app-movie-row title="Drama" [movies]="drama()" />
+  </div>
+</div>
