@@ -25,8 +25,11 @@ export class Register {
     this.error.set('');
     this.auth.register(this.username, this.email, this.password).subscribe({
       next: () => this.router.navigate(['/login']),
-      error: () => {
-        this.error.set('Registration failed. Try a different username.');
+      error: (err) => {
+        const data = err.error ?? {};
+        const values = Object.values(data) as string[][];
+        const msg = data?.detail ?? values?.[0]?.[0] ?? 'Registration failed';
+        this.error.set(msg);
         this.loading.set(false);
       },
     });

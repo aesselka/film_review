@@ -38,7 +38,4 @@ export class AuthService {
     this._username.set(null);
   }
 
-  getToken() {
-    return this._token();
-  }
 }

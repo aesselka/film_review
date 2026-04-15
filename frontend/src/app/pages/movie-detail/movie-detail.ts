@@ -9,22 +9,6 @@ import { AuthService } from '../../core/services/auth.service';
 import { MovieRow } from '../../shared/components/movie-row/movie-row';
 import { Movie, MovieDetail as MovieDetailModel } from '../../models/movie.model';
 import { Review } from '../../models/review.model';
-import MOCK from '../../data/mock-movies.json';
-
-function toDetail(m: (typeof MOCK)[0]): MovieDetailModel {
-  return {
-    ...m,
-    certificate: '',
-    meta_score: 0,
-    video_url: '',
-    director: 'Unknown',
-    stars: [],
-    votes: 0,
-    gross: '',
-    avg_user_rating: m.imdb_rating,
-    reviews_count: 0,
-  };
-}
 
 @Component({
   selector: 'app-movie-detail',
@@ -43,10 +27,12 @@ export class MovieDetail implements OnInit {
   movie = signal<MovieDetailModel | null>(null);
   reviews = signal<Review[]>([]);
   similar = signal<Movie[]>([]);
+  isFavorited = signal(false);
   activeTab = signal<'about' | 'details'>('about');
   showReviewForm = signal(false);
   reviewRating = signal(0);
   reviewText = '';
+  reviewError = signal('');
   hoverStar = signal(0);
 
   readonly stars = [1, 2, 3, 4, 5];
@@ -62,16 +48,13 @@ export class MovieDetail implements OnInit {
         this.movie.set(m);
         if (this.auth.isLoggedIn()) {
           this.historyService.addToHistory(id).subscribe();
+          this.favoritesService.getFavorites().subscribe({
+            next: (favs) => this.isFavorited.set(favs.some((f) => f.movie.id === id)),
+            error: () => {},
+          });
         }
       },
-      error: () => {
-        const found = MOCK.find((m) => m.id === id) ?? MOCK[0];
-        this.movie.set(toDetail(found));
-        const genres = found.genres;
-        this.similar.set(
-          MOCK.filter((m) => m.id !== found.id && m.genres.some((g) => genres.includes(g))).slice(0, 8)
-        );
-      },
+      error: () => {},
     });
 
     this.reviewService.getReviews(id).subscribe({
@@ -88,6 +71,7 @@ export class MovieDetail implements OnInit {
   submitReview() {
     const movie = this.movie();
     if (!movie || !this.reviewRating() || !this.reviewText.trim()) return;
+    this.reviewError.set('');
     this.reviewService
       .createReview(movie.id, { rating: this.reviewRating(), text: this.reviewText })
       .subscribe({
@@ -97,7 +81,7 @@ export class MovieDetail implements OnInit {
           this.reviewRating.set(0);
           this.reviewText = '';
         },
-        error: () => {},
+        error: (err) => this.reviewError.set(err.error?.detail ?? 'Failed to submit review'),
       });
   }
 
@@ -108,10 +92,20 @@ export class MovieDetail implements OnInit {
     });
   }
 
-  addFavorite() {
+  toggleFavorite() {
     const movie = this.movie();
     if (!movie) return;
-    this.favoritesService.addFavorite(movie.id).subscribe();
+    if (this.isFavorited()) {
+      this.favoritesService.removeFavorite(movie.id).subscribe({
+        next: () => this.isFavorited.set(false),
+        error: () => {},
+      });
+    } else {
+      this.favoritesService.addFavorite(movie.id).subscribe({
+        next: () => this.isFavorited.set(true),
+        error: () => {},
+      });
+    }
   }
 
   setRating(star: number) {

@@ -1,0 +1,265 @@
+{
+  "info": {
+    "name": "Nittor API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/auth/register/",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"nurasyl\",\n  \"email\": \"nurasyl@mail.com\",\n  \"password\": \"pass123456\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/auth/login/",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"nurasyl\",\n  \"password\": \"pass123456\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/auth/logout/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Movies",
+      "item": [
+        {
+          "name": "List Movies",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/movies/"
+          }
+        },
+        {
+          "name": "Search Movies",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/movies/?search=dark"
+          }
+        },
+        {
+          "name": "Filter by Genre",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/movies/?genre=drama"
+          }
+        },
+        {
+          "name": "Movie Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/movies/1/"
+          }
+        },
+        {
+          "name": "Similar Movies",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/movies/1/similar/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Genres",
+      "item": [
+        {
+          "name": "List Genres",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/genres/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Get Movie Reviews",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/movies/1/reviews/"
+          }
+        },
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/movies/1/reviews/",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"text\": \"Masterpiece.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Review",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/reviews/1/",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"text\": \"Updated review.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Review",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/reviews/1/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Watch History",
+      "item": [
+        {
+          "name": "Get History",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/history/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Add to History",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/history/",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"movie_id\": 1\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Recommendations",
+      "item": [
+        {
+          "name": "Get Recommendations",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/recommendations/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Favorites",
+      "item": [
+        {
+          "name": "Get Favorites",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/favorites/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        },
+        {
+          "name": "Add to Favorites",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/favorites/",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"movie_id\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Remove from Favorites",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/favorites/1/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/profile/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

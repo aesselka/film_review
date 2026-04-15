@@ -24,8 +24,8 @@ export class Login {
     this.error.set('');
     this.auth.login(this.username, this.password).subscribe({
       next: () => this.router.navigate(['/']),
-      error: () => {
-        this.error.set('Invalid username or password');
+      error: (err) => {
+        this.error.set(err.error?.detail ?? 'Invalid username or password');
         this.loading.set(false);
       },
     });

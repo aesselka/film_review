@@ -22,4 +22,8 @@ export class ReviewService {
   deleteReview(reviewId: number) {
     return this.http.delete(`${this.base}/reviews/${reviewId}/`);
   }
+
+  getUserReviews() {
+    return this.http.get<any[]>(`${this.base}/user-reviews/`);
+  }
 }

@@ -30,8 +30,8 @@
             <button class="btn-outline" (click)="showReviewForm.set(!showReviewForm())">
               Leave a Review
             </button>
-            <button class="icon-action" (click)="addFavorite()">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button class="icon-action" (click)="toggleFavorite()">
+              <svg width="20" height="20" viewBox="0 0 24 24" [attr.fill]="isFavorited() ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2">
                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
               </svg>
             </button>
@@ -75,6 +75,9 @@
               placeholder="Write your review..."
               class="review-textarea"
             ></textarea>
+            @if (reviewError()) {
+              <p class="error-msg">{{ reviewError() }}</p>
+            }
             <div class="review-form-actions">
               <button class="btn-outline" (click)="showReviewForm.set(false)">Cancel</button>
               <button class="btn-primary" (click)="submitReview()">Submit Review</button>
