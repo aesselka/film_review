@@ -16,15 +16,14 @@
   letter-spacing: 1px;
 }
 
-.scroll-btn {
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  transition: opacity 0.2s;
+.row-title-link {
+  text-decoration: none;
+  color: var(--text);
+  transition: color 0.2s;
 }
 
-.scroll-btn:hover {
-  opacity: 0.75;
+.row-title-link:hover {
+  color: var(--accent);
 }
 
 .row-cards {

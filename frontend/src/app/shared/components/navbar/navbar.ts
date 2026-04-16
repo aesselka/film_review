@@ -27,6 +27,10 @@ export class Navbar {
     this.dropdownOpen.set(false);
   }
 
+  goToSearch() {
+    this.router.navigate(['/category'], { queryParams: { focus: '1' } });
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;

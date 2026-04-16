@@ -245,6 +245,13 @@
 .review-user {
   font-weight: 600;
   font-size: 14px;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.review-user:hover {
+  color: var(--accent);
 }
 
 .review-rating {
@@ -274,6 +281,41 @@
   font-size: 14px;
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
+}
+
+.review-image {
+  display: block;
+  max-width: 280px;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.image-upload-wrap {
+  margin-bottom: 16px;
+}
+
+.image-upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.image-upload-label:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.image-upload-input {
+  display: none;
 }
 
 .details-grid {

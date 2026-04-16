@@ -93,20 +93,31 @@ class SimilarMovieSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
     is_owner = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Review
-        fields = ['id', 'user', 'rating', 'text', 'created_at', 'is_owner']
+        fields = ['id', 'user', 'rating', 'text', 'image_url', 'created_at', 'is_owner']
 
     def get_is_owner(self, obj):
         request = self.context.get('request')
         return bool(request and request.user.is_authenticated and obj.user == request.user)
 
+    def get_image_url(self, obj):
+        if obj.image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url
+        return None
+
 
 class ReviewCreateUpdateSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False, allow_null=True)
+
     class Meta:
         model = Review
-        fields = ['rating', 'text']
+        fields = ['rating', 'text', 'image']
 
     def validate_rating(self, value):
         if value < 1 or value > 5:
@@ -157,7 +168,16 @@ class UserReviewSerializer(serializers.ModelSerializer):
     movie_id = serializers.IntegerField(source='movie.id')
     movie_title = serializers.CharField(source='movie.title')
     poster_url = serializers.CharField(source='movie.poster_url')
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Review
-        fields = ['id', 'movie_id', 'movie_title', 'poster_url', 'rating', 'text', 'created_at']
+        fields = ['id', 'movie_id', 'movie_title', 'poster_url', 'rating', 'text', 'image_url', 'created_at']
+
+    def get_image_url(self, obj):
+        if obj.image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url
+        return None

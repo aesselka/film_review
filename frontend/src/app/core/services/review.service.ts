@@ -12,7 +12,17 @@ export class ReviewService {
   }
 
   createReview(movieId: number, payload: ReviewPayload) {
-    return this.http.post<Review>(`${this.base}/movies/${movieId}/reviews/`, payload);
+    if (payload.image) {
+      const form = new FormData();
+      form.append('rating', payload.rating.toString());
+      form.append('text', payload.text);
+      form.append('image', payload.image);
+      return this.http.post<Review>(`${this.base}/movies/${movieId}/reviews/`, form);
+    }
+    return this.http.post<Review>(`${this.base}/movies/${movieId}/reviews/`, {
+      rating: payload.rating,
+      text: payload.text,
+    });
   }
 
   updateReview(reviewId: number, payload: ReviewPayload) {

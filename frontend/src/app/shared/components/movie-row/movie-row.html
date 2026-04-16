@@ -1,16 +1,13 @@
 <section class="movie-row">
   <div class="row-header">
-    <h2 class="row-title">{{ title() }}</h2>
-    <button class="scroll-btn" (click)="scrollRight()">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <circle cx="12" cy="12" r="10" />
-        <polyline points="12 8 16 12 12 16" />
-        <line x1="8" y1="12" x2="16" y2="12" />
-      </svg>
-    </button>
+    @if (link()) {
+      <a [routerLink]="link()" [queryParams]="queryParams() ?? undefined" class="row-title row-title-link">{{ title() }}</a>
+    } @else {
+      <h2 class="row-title">{{ title() }}</h2>
+    }
   </div>
 
-  <div class="row-cards" #row>
+  <div class="row-cards">
     @for (movie of movies(); track movie.id) {
       <app-movie-card [movie]="movie" />
     } @empty {

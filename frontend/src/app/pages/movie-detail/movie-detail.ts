@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MovieService } from '../../core/services/movie.service';
 import { ReviewService } from '../../core/services/review.service';
@@ -12,7 +12,7 @@ import { Review } from '../../models/review.model';
 
 @Component({
   selector: 'app-movie-detail',
-  imports: [FormsModule, MovieRow],
+  imports: [FormsModule, MovieRow, RouterLink],
   templateUrl: './movie-detail.html',
   styleUrl: './movie-detail.css',
 })
@@ -32,6 +32,7 @@ export class MovieDetail implements OnInit {
   showReviewForm = signal(false);
   reviewRating = signal(0);
   reviewText = '';
+  reviewImage: File | null = null;
   reviewError = signal('');
   hoverStar = signal(0);
 
@@ -68,18 +69,38 @@ export class MovieDetail implements OnInit {
     });
   }
 
+  openReviewForm() {
+    this.activeTab.set('about');
+    this.showReviewForm.set(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.getElementById('review-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  onImageChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.reviewImage = input.files?.[0] ?? null;
+  }
+
   submitReview() {
     const movie = this.movie();
     if (!movie || !this.reviewRating() || !this.reviewText.trim()) return;
     this.reviewError.set('');
     this.reviewService
-      .createReview(movie.id, { rating: this.reviewRating(), text: this.reviewText })
+      .createReview(movie.id, {
+        rating: this.reviewRating(),
+        text: this.reviewText,
+        image: this.reviewImage,
+      })
       .subscribe({
         next: (review) => {
           this.reviews.update((r) => [review, ...r]);
           this.showReviewForm.set(false);
           this.reviewRating.set(0);
           this.reviewText = '';
+          this.reviewImage = null;
         },
         error: (err) => this.reviewError.set(err.error?.detail ?? 'Failed to submit review'),
       });
@@ -114,5 +135,9 @@ export class MovieDetail implements OnInit {
 
   starsRepeat(n: number) {
     return '★'.repeat(n);
+  }
+
+  trailerUrl(title: string): string {
+    return `https://www.youtube.com/results?search_query=${encodeURIComponent(title + ' official trailer')}`;
   }
 }

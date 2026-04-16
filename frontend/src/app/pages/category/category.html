@@ -22,6 +22,7 @@
         <path d="m21 21-4.35-4.35" />
       </svg>
       <input
+        #searchInput
         type="text"
         [(ngModel)]="searchQuery"
         name="search"
@@ -36,7 +37,17 @@
     @for (movie of movies(); track movie.id) {
       <app-movie-card [movie]="movie" />
     } @empty {
-      <div class="empty">No movies found</div>
+      @if (!loading()) {
+        <div class="empty">No movies found</div>
+      }
     }
   </div>
+
+  @if (hasMore()) {
+    <div class="load-more-wrap">
+      <button class="load-more-btn" (click)="loadMore()" [disabled]="loading()">
+        {{ loading() ? 'Loading...' : 'Load More' }}
+      </button>
+    </div>
+  }
 </div>

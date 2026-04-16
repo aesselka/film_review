@@ -33,7 +33,7 @@
       <h1 class="hero-title">{{ currentHero.title }}</h1>
       <p class="hero-desc">{{ currentHero.overview }}</p>
       <div class="hero-actions">
-        <a [routerLink]="['/movies', currentHero.id]" class="btn-primary">
+        <a [href]="trailerUrl(currentHero)" target="_blank" rel="noopener" class="btn-primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <polygon points="5 3 19 12 5 21 5 3" />
           </svg>
@@ -50,9 +50,9 @@
   </section>
 
   <div class="feed">
-    <app-movie-row title="Trending Now" [movies]="trending()" />
-    <app-movie-row title="Top Rated" [movies]="topRated()" />
-    <app-movie-row title="Action & Adventure" [movies]="action()" />
-    <app-movie-row title="Drama" [movies]="drama()" />
+    <app-movie-row title="Trending Now" [movies]="trending()" link="/category" />
+    <app-movie-row title="Top Rated" [movies]="topRated()" link="/category" />
+    <app-movie-row title="Action & Adventure" [movies]="action()" link="/category" [queryParams]="{ genre: 'action' }" />
+    <app-movie-row title="Drama" [movies]="drama()" link="/category" [queryParams]="{ genre: 'drama' }" />
   </div>
 </div>

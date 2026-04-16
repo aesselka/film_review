@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from django.db.models import Count
 from rest_framework import status, permissions
 from rest_framework.decorators import api_view, permission_classes
@@ -165,6 +166,7 @@ class MovieReviewsAPIView(APIView):
             movie=movie,
             rating=serializer.validated_data['rating'],
             text=serializer.validated_data['text'],
+            image=serializer.validated_data.get('image'),
         )
 
         response_serializer = ReviewSerializer(review, context={'request': request})
@@ -329,5 +331,31 @@ class UserReviewsAPIView(APIView):
 
     def get(self, request):
         reviews = Review.objects.filter(user=request.user).select_related('movie')
-        serializer = UserReviewSerializer(reviews, many=True)
+        serializer = UserReviewSerializer(reviews, many=True, context={'request': request})
         return Response(serializer.data)
+
+
+class UserPublicProfileAPIView(APIView):
+    def get(self, request, username):
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({'detail': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        reviews = Review.objects.filter(user=user).select_related('movie')
+        favorites = (
+            Favorite.objects.filter(user=user)
+            .select_related('movie')
+            .prefetch_related('movie__genres')
+        )
+
+        review_serializer = UserReviewSerializer(reviews, many=True, context={'request': request})
+        favorite_serializer = FavoriteSerializer(favorites, many=True)
+
+        return Response({
+            'username': user.username,
+            'reviews_count': reviews.count(),
+            'favorites_count': favorites.count(),
+            'reviews': review_serializer.data,
+            'favorites': favorite_serializer.data,
+        })

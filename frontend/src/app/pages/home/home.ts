@@ -71,4 +71,11 @@ export class Home implements OnInit, OnDestroy {
   setHero(index: number) {
     this.heroIndex.set(index);
   }
+  fixImage(url: string): string {
+    return url.replace(/_V1_.*\.jpg/, '_V1_.jpg');
+  }
+
+  trailerUrl(movie: Movie): string {
+    return `https://www.youtube.com/results?search_query=${encodeURIComponent(movie.title + ' official trailer')}`;
+  }
 }

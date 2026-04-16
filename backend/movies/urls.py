@@ -15,6 +15,7 @@ from .views import (
     FavoriteDeleteAPIView,
     ProfileAPIView,
     UserReviewsAPIView,
+    UserPublicProfileAPIView,
 )
 
 urlpatterns = [
@@ -39,4 +40,6 @@ urlpatterns = [
 
     path('profile/', ProfileAPIView.as_view()),
     path('user-reviews/', UserReviewsAPIView.as_view()),
+
+    path('users/<str:username>/', UserPublicProfileAPIView.as_view()),
 ]

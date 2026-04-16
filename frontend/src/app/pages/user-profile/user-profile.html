@@ -1,0 +1,64 @@
+@if (notFound()) {
+  <div class="not-found">User not found</div>
+} @else if (profile(); as p) {
+  <div class="user-profile-page">
+    <div class="profile-hero">
+      <div class="profile-avatar">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+        </svg>
+      </div>
+      <div class="profile-name">{{ p.username }}</div>
+      <div class="profile-stats">
+        <div class="stat">
+          <span class="stat-value">{{ p.reviews_count }}</span>
+          <span class="stat-label">Reviews</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{ p.favorites_count }}</span>
+          <span class="stat-label">Favorites</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-tabs">
+      <button class="tab" [class.active]="activeTab() === 'reviews'" (click)="activeTab.set('reviews')">
+        Reviews
+      </button>
+      <button class="tab" [class.active]="activeTab() === 'favorites'" (click)="activeTab.set('favorites')">
+        Favorites
+      </button>
+    </div>
+
+    <div class="tab-content">
+      @if (activeTab() === 'reviews') {
+        <div class="reviews-list">
+          @for (review of p.reviews; track review.id) {
+            <a [routerLink]="['/movies', review.movie_id]" class="review-card">
+              <img [src]="review.poster_url" [alt]="review.movie_title" class="review-poster" />
+              <div class="review-body">
+                <div class="review-top">
+                  <span class="review-title">{{ review.movie_title }}</span>
+                  <span class="review-stars">{{ starsRepeat(review.rating) }}</span>
+                </div>
+                <p class="review-text">{{ review.text }}</p>
+                @if (review.image_url) {
+                  <img [src]="review.image_url" class="review-image" alt="Review image" />
+                }
+                <span class="review-date">{{ review.created_at.slice(0, 10) }}</span>
+              </div>
+            </a>
+          } @empty {
+            <p class="empty">No reviews yet</p>
+          }
+        </div>
+      }
+
+      @if (activeTab() === 'favorites') {
+        <app-movie-row title="Favorites" [movies]="favorites()" />
+      }
+    </div>
+  </div>
+} @else {
+  <div class="loading">Loading...</div>
+}
